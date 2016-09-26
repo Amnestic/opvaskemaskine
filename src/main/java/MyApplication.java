@@ -29,6 +29,8 @@ public class MyApplication extends Application<MyConfiguration> {
         // Sets up tables
         userDAO.createRoleTable();
         userDAO.createUsersTable();
+        eventDAO.createEventTable();
+
         environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
                 .setAuthenticator(new MyAuthenticator(userDAO))
                 .buildAuthFilter()));

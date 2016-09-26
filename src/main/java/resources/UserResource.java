@@ -8,6 +8,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -24,7 +25,7 @@ public class UserResource {
     }
 
     @POST
-    public void createUser(@FormParam("username") @NotNull String username, @FormParam("password") String password) throws NoSuchAlgorithmException {
+    public Response createUser(@FormParam("username") @NotNull String username, @FormParam("password") String password) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
         String salt = RandomStringUtils.randomAlphanumeric(50);
         String hashedAndSaltedPassword = HexBin.encode(messageDigest.digest((password + salt).getBytes()));
@@ -39,6 +40,8 @@ public class UserResource {
         } catch (Exception e) {
             throw new WebApplicationException(400);
         }
+
+        return Response.status(Response.Status.OK).build();
     }
 
     // TODO update password and that kind of shit

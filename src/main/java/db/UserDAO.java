@@ -5,10 +5,12 @@ import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 /**
  * Created by Jens on 26-Sep-16.
  */
+@RegisterMapper(UserMapper.class)
 public interface UserDAO {
 
     @SqlUpdate("CREATE TABLE IF NOT EXISTS users (" +
@@ -26,14 +28,14 @@ public interface UserDAO {
             "role_name varchar(10)," +
             "UNIQUE(id)" +
             ");" +
-            "INSERT INTO roles (id, role_name) VALUES (0, 'admin');" +
-            "INSERT INTO roles (id, role_name) VALUES (1, 'default');")
+            "INSERT INTO roles (id, role_name) VALUES (0, 'admin') ON CONFLICT DO NOTHING;" +
+            "INSERT INTO roles (id, role_name) VALUES (1, 'default') ON CONFLICT DO NOTHING;")
     void createRoleTable();
 
     @SqlUpdate("INSERT INTO users (username, password, salt, role) VALUES (:username, :password, :salt, :role)")
     void insertUser(@Bind("username") String username, @Bind("password") String password, @Bind("salt") String salt, @Bind("role") int role);
 
-    @SqlQuery("SELECT CASE WHEN COUNT(users.id) > 0 THEN 1 ELSE 0 END" +
+    @SqlQuery("SELECT CASE WHEN COUNT(users.id) > 0 THEN 1 ELSE 0 END " +
             "FROM users WHERE username = :username AND password = :password")
     int authenticateUser(@Bind("username") String username, @Bind("password") String password);
 
