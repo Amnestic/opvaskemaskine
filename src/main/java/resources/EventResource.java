@@ -49,7 +49,12 @@ public class EventResource {
 
     @GET
     @Path("/interval")
-    public List<Event> getEventsInInterval(@QueryParam("startDate") @NotNull @Min(1) Long startDate, @QueryParam("endDate") @NotNull @Min(1) Long endDate) {
-        return eventDAO.getEventsInInterval(Util.convertMillisToDate(startDate), Util.convertMillisToDate(endDate));
+    public List<Event> getEventsInInterval(@QueryParam("startTime") @NotNull @Min(1) Long startTime, @QueryParam("endTime") @NotNull @Min(1) Long endTime) {
+        return eventDAO.getEventsInInterval(Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime));
+    }
+
+    @DELETE
+    public void deleteEvent(@Auth User user, @FormParam("startTime") @NotNull @Min(1) Long startTime, @FormParam("endTime") @NotNull @Min(1) Long endTime) {
+        eventDAO.deleteEvent(user.getName(), Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime));
     }
 }

@@ -33,4 +33,7 @@ public interface EventDAO {
 
     @SqlQuery("SELECT * FROM events WHERE start_time >= :startTime AND :endTime <= end_time")
     List<Event> getEventsInInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
+
+    @SqlUpdate("DELETE FROM events WHERE start_time = :startTime AND end_time = :endTime AND owner = :name")
+    void deleteEvent(@Bind("name") String name, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 }
