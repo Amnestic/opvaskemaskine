@@ -36,4 +36,9 @@ public interface EventDAO {
 
     @SqlUpdate("DELETE FROM events WHERE start_time = :startTime AND end_time = :endTime AND owner = :name")
     void deleteEvent(@Bind("name") String name, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
+
+    @SqlUpdate("UPDATE events SET start_time = :startTimeNew, end_time = :endTimeNew WHERE " +
+            "start_time = :startTimeOld AND end_time = :endTimeOld AND owner = :name")
+    void updateEvent(@Bind("name") String name, @Bind("startTimeOld") Date startTimeOld, @Bind("endTimeOld") Date endTimeOld,
+                     @Bind("startTimeNew") Date startTimeNew, @Bind("endTimeNew") Date endTimeNew);
 }

@@ -10,6 +10,7 @@ import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
 import resources.EventResource;
+import resources.UsageResource;
 import resources.UserResource;
 
 /**
@@ -39,5 +40,6 @@ public class MyApplication extends Application<MyConfiguration> {
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(new EventResource(eventDAO));
         environment.jersey().register(new UserResource(userDAO));
+        environment.jersey().register(new UsageResource());
     }
 }
