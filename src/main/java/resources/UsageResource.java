@@ -1,5 +1,7 @@
 package resources;
 
+import db.UsageDAO;
+
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
@@ -11,5 +13,9 @@ import javax.ws.rs.core.MediaType;
 @Path("/usage")
 @Produces(MediaType.APPLICATION_JSON)
 public class UsageResource {
+    private UsageDAO usageDAO;
 
+    public UsageResource(UsageDAO usageDAO) {
+        this.usageDAO = usageDAO;
+    }
 }

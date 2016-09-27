@@ -1,6 +1,7 @@
 import auth.MyAuthenticator;
 import core.User;
 import db.EventDAO;
+import db.UsageDAO;
 import db.UserDAO;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
@@ -27,6 +28,7 @@ public class MyApplication extends Application<MyConfiguration> {
         final DBI jdbi = factory.build(environment, config.getDataSourceFactory(), "postgresql");
         final EventDAO eventDAO = jdbi.onDemand(EventDAO.class);
         final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
+        final UsageDAO usageDAO = jdbi.onDemand(UsageDAO.class)
 
         // Sets up tables
         userDAO.createRoleTable();
@@ -40,6 +42,6 @@ public class MyApplication extends Application<MyConfiguration> {
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(new EventResource(eventDAO));
         environment.jersey().register(new UserResource(userDAO));
-        environment.jersey().register(new UsageResource());
+        environment.jersey().register(new UsageResource(usageDAO));
     }
 }
