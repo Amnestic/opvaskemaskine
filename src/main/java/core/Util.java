@@ -5,6 +5,8 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by Jens on 26-Sep-16.
@@ -21,5 +23,11 @@ public class Util {
         }
         // Should never happen
         return null;
+    }
+
+    public static Date convertMillisToDate(long millis) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(millis);
+        return calendar.getTime();
     }
 }

@@ -4,6 +4,7 @@ import db.EventDAO;
 import db.UserDAO;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
@@ -33,7 +34,9 @@ public class MyApplication extends Application<MyConfiguration> {
 
         environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
                 .setAuthenticator(new MyAuthenticator(userDAO))
+                .setRealm("SUPER SECRET STUFF")
                 .buildAuthFilter()));
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(new EventResource(eventDAO));
         environment.jersey().register(new UserResource(userDAO));
     }

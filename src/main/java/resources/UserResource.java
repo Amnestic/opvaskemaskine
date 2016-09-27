@@ -2,6 +2,7 @@ package resources;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import core.RoleHelper;
+import core.Util;
 import db.UserDAO;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -25,10 +26,9 @@ public class UserResource {
     }
 
     @POST
-    public Response createUser(@FormParam("username") @NotNull String username, @FormParam("password") String password) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance("SHA-256");
+    public Response createUser(@FormParam("username") @NotNull String username, @FormParam("password") String password) {
         String salt = RandomStringUtils.randomAlphanumeric(50);
-        String hashedAndSaltedPassword = HexBin.encode(messageDigest.digest((password + salt).getBytes()));
+        String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, salt);
 
         // Validations
         if (username.isEmpty() || password.isEmpty()) {

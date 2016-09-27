@@ -40,7 +40,7 @@ database:
     minIdleTime: 1 minute
 
 logging:
-  level: DEBUG
+  level: INFO
   appenders:
     - type: console
       threshold: ALL

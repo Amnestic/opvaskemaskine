@@ -2,7 +2,6 @@ package db;
 
 import core.User;
 import org.skife.jdbi.v2.sqlobject.Bind;
-import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
@@ -15,18 +14,20 @@ public interface UserDAO {
 
     @SqlUpdate("CREATE TABLE IF NOT EXISTS users (" +
             "id SERIAL," +
-            "username varchar(100) ," +
-            "password varchar(250)," +
-            "salt varchar(50)," +
-            "role smallint," +
-            "UNIQUE(username)" +
+            "username varchar(100) NOT NULL," +
+            "password varchar(250) NOT NULL," +
+            "salt varchar(50) NOT NULL," +
+            "role smallint NOT NULL references roles(id)," +
+            "UNIQUE(username)," +
+            "PRIMARY KEY(id)" +
             ");")
     void createUsersTable();
 
     @SqlUpdate("CREATE TABLE IF NOT EXISTS roles (" +
             "id SERIAL," +
-            "role_name varchar(10)," +
-            "UNIQUE(id)" +
+            "role_name varchar(10) NOT NULL," +
+            "UNIQUE(id)," +
+            "PRIMARY KEY(id)" +
             ");" +
             "INSERT INTO roles (id, role_name) VALUES (0, 'admin') ON CONFLICT DO NOTHING;" +
             "INSERT INTO roles (id, role_name) VALUES (1, 'default') ON CONFLICT DO NOTHING;")
