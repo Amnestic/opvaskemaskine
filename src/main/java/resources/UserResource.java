@@ -13,9 +13,6 @@ import javax.ws.rs.core.Response;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by Jens on 26-Sep-16.
- */
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {

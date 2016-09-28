@@ -8,9 +8,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 
-/**
- * Created by Jens on 26-Sep-16.
- */
 public class Util {
     public static String getHashedAndSaltedPassword(String password, String salt) {
         MessageDigest messageDigest = null;

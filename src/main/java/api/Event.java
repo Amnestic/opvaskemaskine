@@ -4,9 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-/**
- * Created by Jens on 26-Sep-16.
- */
 public class Event {
     private Date startTime;
     private Date endTime;

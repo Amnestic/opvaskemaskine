@@ -6,9 +6,7 @@ import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
-/**
- * Created by Jens on 26-Sep-16.
- */
+
 @RegisterMapper(UserMapper.class)
 public interface UserDAO {
 
@@ -47,6 +45,6 @@ public interface UserDAO {
     @SqlQuery("SELECT salt FROM users WHERE username = :username")
     String getSaltForUser(@Bind("username") String username);
 
-    @SqlQuery("SELECT username FROM users WHERE username = :username")
-    String getRoleForUser(@Bind("username") String username);
+    @SqlQuery("SELECT role FROM users WHERE username = :username")
+    int getRoleForUser(@Bind("username") String username);
 }

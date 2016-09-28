@@ -12,9 +12,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import java.security.MessageDigest;
 import java.util.Optional;
 
-/**
- * Created by Jens on 26-Sep-16.
- */
+
 public class MyAuthenticator implements Authenticator<BasicCredentials, User> {
     private UserDAO userDAO;
 

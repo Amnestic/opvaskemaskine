@@ -5,9 +5,6 @@ import io.dropwizard.db.DataSourceFactory;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
-/**
- * Created by Jens on 22-Sep-16.
- */
 public class MyConfiguration extends Configuration {
     @Valid
     @NotNull

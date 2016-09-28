@@ -10,9 +10,6 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Jens on 26-Sep-16.
- */
 @RegisterMapper(EventMapper.class)
 public interface EventDAO {
 
@@ -20,7 +17,7 @@ public interface EventDAO {
             "id SERIAL," +
             "start_time TIMESTAMP NOT NULL," +
             "end_time TIMESTAMP NOT NULL," +
-            "owner VARCHAR(100) NOT NULL," +
+            "owner VARCHAR(100) NOT NULL references users(username)," +
             "PRIMARY KEY(id)" +
             ");")
     void createEventTable();
@@ -34,11 +31,11 @@ public interface EventDAO {
     @SqlQuery("SELECT * FROM events WHERE start_time >= :startTime AND :endTime <= end_time")
     List<Event> getEventsInInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 
-    @SqlUpdate("DELETE FROM events WHERE start_time = :startTime AND end_time = :endTime AND owner = :name")
-    void deleteEvent(@Bind("name") String name, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
+    @SqlUpdate("DELETE FROM events WHERE start_time = :startTime AND end_time = :endTime AND owner = :username")
+    void deleteEvent(@Bind("username") String username, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 
     @SqlUpdate("UPDATE events SET start_time = :startTimeNew, end_time = :endTimeNew WHERE " +
-            "start_time = :startTimeOld AND end_time = :endTimeOld AND owner = :name")
-    void updateEvent(@Bind("name") String name, @Bind("startTimeOld") Date startTimeOld, @Bind("endTimeOld") Date endTimeOld,
+            "start_time = :startTimeOld AND end_time = :endTimeOld AND owner = :username")
+    void updateEvent(@Bind("username") String username, @Bind("startTimeOld") Date startTimeOld, @Bind("endTimeOld") Date endTimeOld,
                      @Bind("startTimeNew") Date startTimeNew, @Bind("endTimeNew") Date endTimeNew);
 }

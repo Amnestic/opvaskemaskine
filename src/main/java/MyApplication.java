@@ -14,9 +14,6 @@ import resources.EventResource;
 import resources.UsageResource;
 import resources.UserResource;
 
-/**
- * Created by Jens on 22-Sep-16.
- */
 public class MyApplication extends Application<MyConfiguration> {
 
     public static void main(String[] args) throws Exception {
@@ -28,12 +25,13 @@ public class MyApplication extends Application<MyConfiguration> {
         final DBI jdbi = factory.build(environment, config.getDataSourceFactory(), "postgresql");
         final EventDAO eventDAO = jdbi.onDemand(EventDAO.class);
         final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
-        final UsageDAO usageDAO = jdbi.onDemand(UsageDAO.class)
+        final UsageDAO usageDAO = jdbi.onDemand(UsageDAO.class);
 
         // Sets up tables
         userDAO.createRoleTable();
         userDAO.createUsersTable();
         eventDAO.createEventTable();
+        usageDAO.createUsageTable();
 
         environment.jersey().register(new AuthDynamicFeature(new BasicCredentialAuthFilter.Builder<User>()
                 .setAuthenticator(new MyAuthenticator(userDAO))

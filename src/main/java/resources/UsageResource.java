@@ -1,14 +1,19 @@
 package resources;
 
+import api.Usage;
+import core.RoleHelper;
+import core.User;
+import core.Util;
 import db.UsageDAO;
+import io.dropwizard.auth.Auth;
 
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-
-/**
- * Created by Jens on 27-Sep-16.
- */
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 @Path("/usage")
 @Produces(MediaType.APPLICATION_JSON)
@@ -17,5 +22,57 @@ public class UsageResource {
 
     public UsageResource(UsageDAO usageDAO) {
         this.usageDAO = usageDAO;
+    }
+
+    @Path("/washing_machine")
+    @POST
+    public void incrementWashingMachineUsage(@Auth User user) {
+        usageDAO.insertUsage(user.getName(), Usage.WASHING_MACHINE, getStartDateOfCurrentMonth());
+    }
+
+    @Path("/washing_machine")
+    @DELETE
+    public void decrementWashingMachineUsage(@Auth User user) {
+        usageDAO.deleteUsage(user.getName(), Usage.WASHING_MACHINE, getStartDateOfCurrentMonth());
+    }
+
+    @Path("/tumble_drier")
+    @POST
+    public void incrementTumbleDrierUsage(@Auth User user) {
+        usageDAO.insertUsage(user.getName(), Usage.TUMBLE_DRIER, getStartDateOfCurrentMonth());
+    }
+
+    @Path("/tumble_drier")
+    @DELETE
+    public void decrementTumbleDrierUsage(@Auth User user) {
+        usageDAO.deleteUsage(user.getName(), Usage.TUMBLE_DRIER, getStartDateOfCurrentMonth());
+    }
+
+    @GET
+    public List<Usage> getUsagesForSelfInInterval(@Auth User user, @QueryParam("startTime") @NotNull @Min(0) Long startTime,
+                                                  @QueryParam("endTime") @NotNull @Min(0) Long endTime) {
+        return usageDAO.getUsageForUserInInterval(user.getName(), Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime));
+    }
+
+    @Path("/all")
+    @GET
+    public List<Usage> getAllUsageForAllInInterval(@Auth User user, @QueryParam("startTime") @NotNull @Min(0) Long startTime,
+                                                   @QueryParam("endTime") @NotNull @Min(0) Long endTime) {
+        // TODO must be able to do this in a better way...
+        if (!RoleHelper.isAdmin(user.getRole())) {
+            throw new WebApplicationException(403);
+        }
+
+        return usageDAO.getAllUsagesInInterval(Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime));
+    }
+
+    private Date getStartDateOfCurrentMonth() {
+        Calendar startDateOfMonth = Calendar.getInstance();
+        startDateOfMonth.set(Calendar.DAY_OF_MONTH, 1);
+        startDateOfMonth.set(Calendar.HOUR_OF_DAY, 0);
+        startDateOfMonth.set(Calendar.MINUTE, 0);
+        startDateOfMonth.set(Calendar.SECOND, 0);
+        startDateOfMonth.set(Calendar.MILLISECOND, 0);
+        return startDateOfMonth.getTime();
     }
 }

@@ -17,9 +17,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Created by Jens on 26-Sep-16.
- */
 @Path("/event")
 @Produces(MediaType.APPLICATION_JSON)
 public class EventResource {
@@ -30,25 +27,30 @@ public class EventResource {
     }
 
     @POST
-    public void createEvent(@Auth User user, @FormParam("startTime") @NotNull Long startTime, @FormParam("endTime") @NotNull Long endTime) {
+    public void createEvent(@Auth User user, @FormParam("startTime") @NotNull @Min(0) Long startTime,
+                            @FormParam("endTime") @NotNull @Min(0) Long endTime) {
         validateEvent(startTime, endTime);
         eventDAO.insertEvent(new Event(Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime), user.getName()));
     }
 
     @GET
     @Path("/interval")
-    public List<Event> getEventsInInterval(@QueryParam("startTime") @NotNull Long startTime, @QueryParam("endTime") @NotNull Long endTime) {
+    public List<Event> getEventsInInterval(@QueryParam("startTime") @NotNull @Min(0) Long startTime,
+                                           @QueryParam("endTime") @NotNull @Min(0) Long endTime) {
         return eventDAO.getEventsInInterval(Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime));
     }
 
     @DELETE
-    public void deleteEvent(@Auth User user, @FormParam("startTime") @NotNull Long startTime, @FormParam("endTime") @NotNull Long endTime) {
+    public void deleteEvent(@Auth User user, @FormParam("startTime") @NotNull @Min(0) Long startTime,
+                            @FormParam("endTime") @NotNull @Min(0) Long endTime) {
         eventDAO.deleteEvent(user.getName(), Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime));
     }
 
     @PUT
-    public void editEvent(@Auth User user, @FormParam("startTimeOld") @NotNull Long startTimeOld, @FormParam("endTimeOld") @NotNull Long endTimeOld,
-                          @FormParam("startTimeNew") Long startTimeNew, @FormParam("endTimeNew") Long endTimeNew) {
+    public void editEvent(@Auth User user, @FormParam("startTimeOld") @NotNull @Min(0) Long startTimeOld,
+                          @FormParam("endTimeOld") @NotNull @Min(0) Long endTimeOld,
+                          @FormParam("startTimeNew") @NotNull @Min(0) Long startTimeNew,
+                          @FormParam("endTimeNew") @NotNull @Min(0) Long endTimeNew) {
         validateEvent(startTimeNew, endTimeNew);
         eventDAO.updateEvent(user.getName(), Util.convertMillisToDate(startTimeOld), Util.convertMillisToDate(endTimeOld),
                 Util.convertMillisToDate(startTimeNew), Util.convertMillisToDate(endTimeNew));

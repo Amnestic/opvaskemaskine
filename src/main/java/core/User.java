@@ -2,14 +2,11 @@ package core;
 
 import java.security.Principal;
 
-/**
- * Created by Jens on 26-Sep-16.
- */
 public class User implements Principal {
     private String name;
-    private String role;
+    private int role;
 
-    public User(String name, String role) {
+    public User(String name, int role) {
         this.name = name;
         this.role = role;
     }
@@ -18,7 +15,7 @@ public class User implements Principal {
         return name;
     }
 
-    public String getRole() {
+    public int getRole() {
         return role;
     }
 }
